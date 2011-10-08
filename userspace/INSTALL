@@ -1,0 +1,9 @@
+Steps to build and install this code:
+
+1. `cd [BUILD_DIR]` where BUILD_DIR is where the build should occur (look up out-of-source builds).
+2. `cmake [SRC_DIR]` where SRC_DIR is this directory (you will need to get cmake and QT first).
+3. `make`
+4. ...and to install: `make install`
+
+The programs are called 'bandwidth_monitor_cmd' and 'bandwidth_monitor_gui'.
+

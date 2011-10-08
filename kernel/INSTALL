@@ -1,0 +1,18 @@
+# Do something roughly equivalent to the following:
+
+# Run make.
+make
+
+# Copy bandwidth module to the modules directory.
+cp bandwidth.ko /lib/modules/`uname -r`/
+
+# Add 'bandwidth' to /etc/modules (or /etc/modules.conf).
+# This means the module will be loaded at boot time.
+echo bandwidth >> /etc/modules
+
+# Update dependencies.
+depmod -a
+
+# Enable the module.
+modprobe bandwidth
+
