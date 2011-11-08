@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 	
 	if(strcmp(argv[1], "run") == 0) {
 		if(argc != 3) {
-			std::cout << "Format: bandwidth_monitor_cmd run [limit (in MBs)]" << std::endl;
+			std::cout << "Format: bandwidth_monitor_cmd run [limit (in bytes)]" << std::endl;
 			return 1;
 		}
 		
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 				
 				bandwidthFile.save(bandwidth);
 				
-				module.setLimit(maxTransferRate);
+				module.setLimit(maxTransferRate > 0.0 ? maxTransferRate : 0.0);
 			}
 			
 			if(usleep(100000) == -1){
