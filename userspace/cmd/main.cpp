@@ -70,11 +70,11 @@ int main(int argc, char* argv[]) {
 				
 				const ULong total = bandwidth.down + bandwidth.up;
 				const ULong limit = ULong(atof(argv[2]));
-				const ULong maxTransferRate = (limit - total) / 60.0;
+				const ULong maxTransferRate = limit > total ? ((limit - total) / 60.0) : 0;
 				
 				bandwidthFile.save(bandwidth);
 				
-				module.setLimit(maxTransferRate > 0.0 ? maxTransferRate : 0.0);
+				module.setLimit(maxTransferRate);
 			}
 			
 			if(usleep(100000) == -1){
