@@ -81,7 +81,7 @@ void Window::update(){
 	
 		module.setLimit(maxTransferRate);
 		
-		const double usage = double(total) / double(limit);
+		const double usage = total < limit ? double(total) / double(limit) : 1.0;
 
 		progress_->setValue(usage * 100000.0);
 	
