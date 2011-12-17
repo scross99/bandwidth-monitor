@@ -224,12 +224,13 @@ static ssize_t limit_store(struct kobject * kobj, struct kobj_attribute * attr, 
 	update();
 	
 	sscanf(buf, "%lluu", &setSecondLimit);
-	nextSecondSet++;
 	
 	// If two or more userspace processes are limiting bandwidth, use the smallest value.
-	if(nextSecondSet == 1 || setSecondLimit <= nextSecondLimit){
+	if(nextSecondSet == 0 || setSecondLimit <= nextSecondLimit){
 		nextSecondLimit = setSecondLimit;
 	}
+	
+	nextSecondSet++;
 	return count;
 }
 

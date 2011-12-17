@@ -17,15 +17,16 @@ int main(int argc, char* argv[]) {
 	if(argc < 2) {
 		std::cout << "Format: bandwidth_monitor_cmd [command] [...]" << std::endl;
 		std::cout << "    where command is one of the following:" << std::endl;
-		std::cout << "    'run' - Enable remote internet traffic with the given limit" << std::endl;
+		std::cout << "    'day-limit' - Enable remote internet traffic with a given total limit for the day" << std::endl;
+		std::cout << "    'rate-limit' - Enable remote internet traffic with a given rate limit" << std::endl;
 		std::cout << "    'get' - Get current bandwidth consumed" << std::endl;
 		std::cout << "    'poll' - Poll current bandwidth consumed" << std::endl;
 		return 1;
 	}
 	
-	if(strcmp(argv[1], "run") == 0) {
+	if(strcmp(argv[1], "day-limit") == 0) {
 		if(argc != 3) {
-			std::cout << "Format: bandwidth_monitor_cmd run [limit (in bytes)]" << std::endl;
+			std::cout << "Format: bandwidth_monitor_cmd day-limit [limit (in bytes)]" << std::endl;
 			return 1;
 		}
 		
@@ -40,7 +41,9 @@ int main(int argc, char* argv[]) {
 		
 		ULong currentSeconds = 0;
 		
-		std::cout << "Running..." << std::endl;
+		const ULong limit = ULong(atof(argv[2]));
+		
+		std::cout << "Running with day limit of " << displayDataSize(limit) << "..." << std::endl;
 		
 		const time_t currentTime = time(0);
 		const tm * timeData = localtime(&currentTime);
@@ -69,12 +72,42 @@ int main(int argc, char* argv[]) {
 				const Bandwidth bandwidth = (moduleBandwidth - moduleStartBandwidth) + startBandwidth;
 				
 				const ULong total = bandwidth.down + bandwidth.up;
-				const ULong limit = ULong(atof(argv[2]));
-				const ULong maxTransferRate = limit > total ? ((limit - total) / 60.0) : 0;
+				const ULong maxTransferRate = (limit > total ? limit - total : 0ul) / 60ul;
 				
 				bandwidthFile.save(bandwidth);
 				
 				module.setLimit(maxTransferRate);
+			}
+			
+			if(usleep(100000) == -1){
+				std::cout << "usleep failed" << std::endl;
+				return 1;
+			}
+		}
+	
+	} else if(strcmp(argv[1], "rate-limit") == 0) {
+		if(argc != 3) {
+			std::cout << "Format: bandwidth_monitor_cmd rate-limit [limit (in bytes per second)]" << std::endl;
+			return 1;
+		}
+		
+		Module module;
+		
+		ULong currentSeconds = 0;
+		
+		const ULong rateLimit = atoll(argv[2]);
+		
+		std::cout << "Running with rate limit of " << displayDataSize(rateLimit) << "/s..." << std::endl;
+		
+		while(true){
+			Module module;
+
+			const ULong seconds = module.getSeconds();
+			
+			if(seconds != currentSeconds){
+				currentSeconds = seconds;
+				
+				module.setLimit(rateLimit);
 			}
 			
 			if(usleep(100000) == -1){

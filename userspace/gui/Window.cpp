@@ -74,7 +74,7 @@ void Window::update(){
 
 		const ULong total = bandwidth.down + bandwidth.up;
 		const ULong limit = 4ul * 1024ul * 1024ul * 1024ul; // 4GB.
-		const ULong maxTransferRate = (limit - total) / 60.0;
+		const ULong maxTransferRate = (limit > total ? limit - total : 0ul) / 60ul;
 	
 		BandwidthFile file;
 		file.save(bandwidth);
