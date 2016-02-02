@@ -1,5 +1,5 @@
-Bandwidth Monitor (by Stephen Cross)
-------------------------------------
+Bandwidth Monitor
+-----------------
 
 This software is a combination of a linux kernel module and two userspace programs
 which monitor all bandwidth going in/out of the host machine, identify traffic that
