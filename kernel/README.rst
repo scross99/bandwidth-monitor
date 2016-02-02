@@ -1,7 +1,8 @@
 Bandwidth Monitor Kernel Module
 -------------------------------
 
-Firstly, a WARNING: This is a kernel module; if it crashes so will your computer.
+.. warning::
+	This is a kernel module; if it crashes so will your computer.
 
 This is a module to monitor all bandwidth going in/out your computer, identify
 non-local traffic and applying bandwidth rate limiting as directed by user space
@@ -22,7 +23,7 @@ all network traffic.
 Currently, the meaning of local traffic is hardcoded into the module. In future
 it may be customisable outside of the module.
 
-The module creates a number of 'files' at /sys/kernel/bandwidth/ which can be
+The module creates a number of 'files' at ``/sys/kernel/bandwidth/`` which can be
 used to access the download bandwidth used, upload bandwidth used, the current
 limit on the total bandwidth and the seconds from the perspective of the kernel
 module (when the second value changes, the kernel module will update the values
